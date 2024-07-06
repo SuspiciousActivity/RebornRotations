@@ -1,24 +1,16 @@
-﻿/*namespace DefaultRotations.Melee;
+﻿namespace DefaultRotations.Melee;
 
 [Rotation("Default", CombatType.PvE, GameVersion = "7.0")]
 [SourceCode(Path = "main/DefaultRotations/Melee/VPR_Default.cs")]
-[Api(1)]
+[Api(2)]
 public sealed class VPR_Default : ViperRotation
 {
-    #region Countdown logic
-    // Defines logic for actions to take during the countdown before combat starts.
-    protected override IAction? CountDownAction(float remainTime)
-    {
-
-        return base.CountDownAction(remainTime);
-    }
-    #endregion
-
     #region Emergency Logic
     // Determines emergency actions to take based on the next planned GCD action.
     protected override bool EmergencyAbility(IAction nextGCD, out IAction? act)
     {
         act = null;
+        if (InCombat && SerpentsIrePvE.CanUse(out act)) return true;
 
         return base.EmergencyAbility(nextGCD, out act);
     }
@@ -27,7 +19,10 @@ public sealed class VPR_Default : ViperRotation
     #region oGCD Logic
     protected override bool AttackAbility(IAction nextGCD, out IAction? act)
     {
-        act = null;
+
+        if (SerpentsTailPvE.CanUse(out act)) return true;
+        if (TwinfangPvE.CanUse(out act)) return true;
+        if (TwinbloodPvE.CanUse(out act)) return true;
 
 
         return base.AttackAbility(nextGCD, out act);
@@ -37,31 +32,31 @@ public sealed class VPR_Default : ViperRotation
     {
         act = null;
 
+        if (SlitherPvE.CanUse(out act)) return true;
 
         return base.MoveForwardAbility(nextGCD, out act);
     }
     #endregion
 
     #region GCD Logic
-    protected override bool MoveForwardGCD(out IAction? act)
-    {
-        act = null;
-
-        return base.MoveForwardGCD(out act);
-    }
 
     protected override bool GeneralGCD(out IAction? act)
     {
-        act = null;
+        // 3
+        if (HindstingStrikePvE.CanUse(out act)) return true;
+        if (HindsbaneFangPvE.CanUse(out act)) return true;
+        if (FlankstingStrikePvE.CanUse(out act)) return true;
+        if (FlanksbaneFangPvE.CanUse(out act)) return true;
+        // 2
+        if (SwiftskinsStingPvE.CanUse(out act)) return true;
+        if (HuntersStingPvE.CanUse(out act)) return true;
+        // 1
+        if (DreadFangsPvE.CanUse(out act)) return true;
+        if (SteelFangsPvE.CanUse(out act)) return true;
+        // Ranged Attack
+        if (WrithingSnapPvE.CanUse(out act)) return true;
 
         return base.GeneralGCD(out act);
-    }
-
-    private bool AttackGCD(out IAction? act, bool burst)
-    {
-        act = null;
-
-        return false;
     }
     #endregion
 
@@ -70,7 +65,8 @@ public sealed class VPR_Default : ViperRotation
     // These methods simplify the main logic by encapsulating specific checks related to abilities' cooldowns and prerequisites.
     private bool CanUseExamplePvE(out IAction? act)
     {
-
+        act = null;
+        return false;
     }
     #endregion
-}*/
+}
